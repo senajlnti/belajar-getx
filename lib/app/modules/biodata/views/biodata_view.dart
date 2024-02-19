@@ -5,10 +5,11 @@ import 'package:get/get.dart';
 import '../controllers/biodata_controller.dart';
 import 'package:intl/intl.dart';
 
-class BiodataView extends GetView<BiodataController> {
-  BiodataView({Key? key}) : super(key: key);
+class BiodataView extends StatelessWidget {
+   BiodataView({Key? key}) : super(key: key);
 
-  final BiodataController biodataController = BiodataController();
+   final BiodataController biodataController = BiodataController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -20,26 +21,26 @@ class BiodataView extends GetView<BiodataController> {
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(16.0),
-         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Form(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  TextFormField(
-                    decoration: InputDecoration(labelText: 'Nama'),
-                    onChanged: (value) => 
-                    biodataController.nama.value = value,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Form(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    TextFormField(
+                      decoration: InputDecoration(labelText: 'Nama'),
+                      onChanged: (value) =>
+                          biodataController.nama.value = value,
                     ),
                     SizedBox(height: 16.0),
                     InkWell(
                       onTap: () => biodataController.selectDate(context),
                       child: InputDecorator(
                         decoration: InputDecoration(
-                        labelText: 'Tanggal Lahir',
-                        hintText: 'Pilih Tanggal',
-                      ),
+                          labelText: 'Tanggal Lahir',
+                          hintText: 'Pilih tanggal',
+                        ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -49,71 +50,97 @@ class BiodataView extends GetView<BiodataController> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 116.0),
+                    SizedBox(height: 16.0),
                     DropdownButtonFormField(
-                      items: ['Islam', 'Kristen', 'Hindu', 'Buddha', 'Lainnya']
-                      .map((agama) => DropdownMenuItem(
-                        value: agama, child: Text(agama)))
-                      .toList(),
-                      onChanged: (value) => 
+                      items: [
+                        'Islam',
+                        'Kristen',
+                        'Hindu',
+                        'Buddha',
+                        'Lainnya'
+                      ]
+                          .map((agama) => DropdownMenuItem(
+                              value: agama, child: Text(agama)))
+                          .toList(),
+                      onChanged: (value) =>
                           biodataController.agama.value = value.toString(),
-                          decoration: InputDecoration(labelText: 'Agama'),
-                      ),
-                    SizedBox(height: 16.0,),
+                      decoration: InputDecoration(labelText: 'Agama'),
+                    ),
+                    SizedBox(height: 16.0),
                     Row(
                       children: [
                         Obx(() => Radio(
-                          value: 'Laki-Laki',
-                          groupValue: biodataController.jenisKelamin.value,
-                          onChanged: (value) =>
-                              biodataController.jenisKelamin.value = value!,
-                        )),
-                        Text('Laki-Laki'),
+                              value: 'Laki-laki',
+                              groupValue: biodataController.jenisKelamin.value,
+                              onChanged: (value) => biodataController
+                                  .jenisKelamin.value = value!,
+                            )),
+                        Text('Laki-laki'),
                         Obx(() => Radio(
-                          value: 'Perempuan',
-                          groupValue: biodataController.jenisKelamin.value,
-                          onChanged: (value) =>
-                              biodataController.jenisKelamin.value = value!,
-                        )),
+                              value: 'Perempuan',
+                              groupValue: biodataController.jenisKelamin.value,
+                              onChanged: (value) => biodataController
+                                  .jenisKelamin.value = value!,
+                            )),
                         Text('Perempuan'),
                       ],
                     ),
-                    SizedBox(height: 16.0,),
+                    SizedBox(height: 16.0),
                     TextFormField(
                       maxLines: 3,
                       decoration: InputDecoration(labelText: 'Alamat'),
-                      onChanged: (value) => 
-                      biodataController.alamat.value = value,
-                    ),
-                    SizedBox(height: 16.0,),
-                    for (String hobi in biodataController.getHobiList())
-                    Obx(() => CheckboxListTile(
-                      title: Text(hobi), 
-                      value: biodataController.hobi.contains(hobi),
                       onChanged: (value) =>
-                          biodataController.toggleHobi(hobi),
-                    )),
-                    SizedBox(height: 16.0,),
+                          biodataController.alamat.value = value,
+                    ),
+                    SizedBox(height: 16.0),
+                    for (String hobi in biodataController.getHobiList())
+                      Obx(() => CheckboxListTile(
+                            title: Text(hobi),
+                            value: biodataController.hobi.contains(hobi),
+                            onChanged: (value) =>
+                                biodataController.toggleHobi(hobi),
+                          )),
+                    SizedBox(height: 16.0),
                     ElevatedButton(
                       onPressed: () => biodataController.submitForm(),
-                       child: Text('Submit'),
+                      child: Text('Submit'),
                     ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            SizedBox(height: 16.0,),
+              SizedBox(height: 16.0),
             Obx(() {
-              if (biodataController.isfFormSubmitted.value) {
-                return Text(
-                  'Output: ${biodataController.nama}, ${biodataController.tanggalLahir}, ${biodataController.agama}, ${biodataController.jenisKelamin}, ${biodataController.alamat}, ${biodataController.hobi}',
-                  style: TextStyle(fontSize: 16.0),
+              if (biodataController.isFormSubmitted.value) {
+                return AlertDialog(
+                  title: Text('Output'),
+                  content: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Nama: ${biodataController.nama.value}'),
+                      Text('Tanggal Lahir: ${biodataController.tanggalLahir.value}'),
+                      Text('Agama: ${biodataController.agama.value}'),
+                      Text('Jenis Kelamin: ${biodataController.jenisKelamin.value}'),
+                      Text('Alamat: ${biodataController.alamat.value}'),
+                      Text('Hobi: ${biodataController.hobi.value.join(', ')}'),
+                    ],
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Get.back(); 
+                        biodataController.isFormSubmitted.value = true;
+                      },
+                      child: Text('OK'),
+                    ),
+                  ],
                 );
               } else {
                 return SizedBox.shrink();
               }
             }),
-          ],
-         ),
+
+            ],
+          ),
         ),
       ),
     );
