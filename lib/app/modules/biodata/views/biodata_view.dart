@@ -39,7 +39,7 @@ class BiodataView extends StatelessWidget {
                       child: InputDecorator(
                         decoration: InputDecoration(
                           labelText: 'Tanggal Lahir',
-                          hintText: 'Pilih tanggal',
+                          hintText: 'Pilih Tanggal',
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
